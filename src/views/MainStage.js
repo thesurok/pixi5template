@@ -8,12 +8,10 @@ class MainStage extends Sprite {
         this.title = this.addChild(new PIXI.Text("Hello World!", { fill: "white" }));
         this.title.anchor.set(0.5);
 
-        new TWEEN.Tween(this.title.scale)
-            .to({ x: 1.1, y: 1.1 }, 1000)
-            .repeat(1000)
-            .yoyo(true)
-            .onUpdate(obj => console.log(obj))
-            .start();
+        const tw = new TWEEN.Tween(this.title.scale);
+        tw.to({ x: 1.2, y: 1.2 }, 1000);
+        tw.onUpdate(obj => console.log(obj.x));
+        tw.start();
     }
 
     onResize() {
@@ -23,6 +21,10 @@ class MainStage extends Sprite {
         } else {
 
         }
+    }
+
+    tick(delta) {
+        // this.title.x += delta;
     }
 }
 

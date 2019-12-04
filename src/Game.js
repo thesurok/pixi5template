@@ -2,6 +2,7 @@ import MainStage from './views/MainStage';
 import LayoutManager from './libs/LayoutManager';
 import TWEEN from '@tweenjs/tween.js';
 
+window.TWEEN = TWEEN;
 class Game {
     constructor() {
         this.emitter = new PIXI.utils.EventEmitter();
@@ -9,6 +10,7 @@ class Game {
             width: window.innerWidth,
             height: window.innerHeight
         });
+        this.liveTime = 0;
         this.initListeners();
     }
 
@@ -37,8 +39,7 @@ class Game {
             //Entry point
             this.mainStage = this.app.stage.addChild(new MainStage());
             this.app.ticker.add(delta => {
-                TWEEN && TWEEN.update(delta);
-                this.emit("tick", delta);
+                this.tick(delta);
             });
             requestAnimationFrame(_ => this.emit("preloadComplete"));
         })
@@ -68,6 +69,15 @@ class Game {
         if (this.mainStage) {
             this.mainStage.position.set(this.app.renderer.width / 2, this.app.renderer.height / 2);
             if (this.mainStage.onResize) this.mainStage.onResize();
+        }
+    }
+
+    tick(delta) {
+        TWEEN && TWEEN.update();
+        this.emit("tick", delta);
+
+        if (this.mainStage && this.mainStage.tick) {
+            this.mainStage.tick(delta);
         }
     }
 }

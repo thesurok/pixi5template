@@ -20,8 +20,7 @@ module.exports = {
         ]),
         new webpack.ProvidePlugin({
             PIXI: 'pixi.js',
-            LayoutManager: [path.resolve(path.join(__dirname, 'src/libs/LayoutManager.js')), 'default'],
-            Game: [path.resolve(path.join(__dirname, 'src/Game.js')), 'default']
+            TWEEN: ['@tweenjs/tween.js', 'default']
         })
     ]
 };

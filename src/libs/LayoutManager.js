@@ -1,9 +1,16 @@
+import Game from "../Game.js"
+
 class LayoutManager {
     constructor() {
         this.eventEmitter = new PIXI.utils.EventEmitter();
 
         this.width = 0;
         this.height = 0;
+
+        this.gameWidth = 0;
+        this.gameHeight = 0;
+
+        this.aspectRatio = 0;
     }
 
     handleResize(w = window.innerWidth, h = window.innerHeight) {
@@ -12,9 +19,10 @@ class LayoutManager {
         this.width = w;
         this.height = h;
 
-        Game.app.renderer.resize(w, h);
+        this.aspectRatio = Math.max(w / h, h / w);
 
-        Game.onResize();
+
+        Game.app.renderer.resize(this.width, this.height);
 
         this.eventEmitter.emit("resize", { width: this.width, height: this.height });
     }

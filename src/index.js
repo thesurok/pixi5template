@@ -1,3 +1,6 @@
+import Game from './Game.js';
+import LayoutManager from './libs/LayoutManager.js';
+
 const resizeThrottler = _ => {
     const throttle = (type, name, obj) => {
         obj = obj || window;
@@ -19,9 +22,7 @@ const resizeThrottler = _ => {
     });
 };
 
-Game.preloadAssets([
-    { name: 'knight', path: './assets/images/knight.png' }
-]);
+Game.preloadAssets();
 
 Game.init();
 

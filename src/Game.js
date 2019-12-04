@@ -1,5 +1,6 @@
 import MainStage from './views/MainStage';
 import LayoutManager from './libs/LayoutManager';
+import TWEEN from '@tweenjs/tween.js';
 
 class Game {
     constructor() {
@@ -8,9 +9,13 @@ class Game {
             width: window.innerWidth,
             height: window.innerHeight
         });
+        this.initListeners();
     }
 
     preloadAssets(assets) {
+        if (assets === undefined) {
+            console.warn("no assets were loaded");
+        }
         if (Array.isArray(assets)) {
             for (let i = 0; i < assets.length; i++) {
                 this.app.loader.add(assets[i].name, assets[i].path);
@@ -28,14 +33,14 @@ class Game {
         this.app.view.style.left = "0";
         this.app.view.style.top = "0";
 
-        this.app.loader.load((p) => {
+        this.app.loader.load(() => {
             //Entry point
             this.mainStage = this.app.stage.addChild(new MainStage());
             this.app.ticker.add(delta => {
+                TWEEN && TWEEN.update(delta);
                 this.emit("tick", delta);
             });
-            this.initListeners();
-            this.emit("preloadComplete");
+            requestAnimationFrame(_ => this.emit("preloadComplete"));
         })
     }
 
@@ -60,7 +65,10 @@ class Game {
     }
 
     onResize() {
-        this.mainStage.position.set(this.app.renderer.width / 2, this.app.renderer.height / 2);
+        if (this.mainStage) {
+            this.mainStage.position.set(this.app.renderer.width / 2, this.app.renderer.height / 2);
+            if (this.mainStage.onResize) this.mainStage.onResize();
+        }
     }
 }
 
